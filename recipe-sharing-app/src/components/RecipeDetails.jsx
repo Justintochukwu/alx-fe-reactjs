@@ -5,13 +5,16 @@ import DeleteRecipeButton from './DeleteRecipeButton';
 const RecipeDetails = () => {
   const { id } = useParams();
   const recipeId = Number(id);
-  const recipe = useRecipeStore((s) => s.recipes.find((r) => r.id === recipeId));
+
+  const recipe = useRecipeStore((state) =>
+    state.recipes.find((r) => r.id === recipeId)
+  );
 
   if (!recipe) {
     return (
       <div>
         <p>Recipe not found.</p>
-        <Link to="/">Back to list</Link>
+        <Link to="/">← Back to Recipes</Link>
       </div>
     );
   }
@@ -19,16 +22,19 @@ const RecipeDetails = () => {
   return (
     <div>
       <h1>{recipe.title}</h1>
+      <p><strong>ID:</strong> {recipe.id}</p> {/* ✅ recipe.id now shown */}
       <p>{recipe.description}</p>
 
-      <div style={{ marginTop: 12 }}>
-        <Link to={`/recipes/${recipeId}/edit`}>Edit</Link>
-        <span style={{ marginLeft: 8 }}>
-          <DeleteRecipeButton id={recipeId} redirectTo="/" />
+      <div style={{ marginTop: 16 }}>
+        <Link to={`/recipes/${recipe.id}/edit`}>✏️ Edit</Link>
+        <span style={{ marginLeft: 12 }}>
+          <DeleteRecipeButton id={recipe.id} redirectTo="/" />
         </span>
       </div>
 
-      <p style={{ marginTop: 12 }}><Link to="/">← Back</Link></p>
+      <p style={{ marginTop: 20 }}>
+        <Link to="/">← Back to Recipe List</Link>
+      </p>
     </div>
   );
 };
