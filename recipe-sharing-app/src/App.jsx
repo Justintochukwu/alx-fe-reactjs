@@ -1,23 +1,23 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import AddRecipeForm from './components/AddRecipeForm';
-import RecipeList from './components/RecipeList';
-import RecipeDetails from './components/RecipeDetails';
-import EditRecipeForm from './components/EditRecipeForm';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import About from "./components/About";
+import Services from "./components/Services";
+import Contact from "./components/Contact";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <div style={{ padding: 20 }}>
-      <header style={{ marginBottom: 20 }}>
-        <h1>My Recipe App 🍲</h1>
-        <nav><Link to="/">Home</Link></nav>
-      </header>
-
-      <Routes>
-        <Route path="/" element={<><AddRecipeForm /><RecipeList /></>} />
-        <Route path="/recipes/:id" element={<RecipeDetails />} />
-        <Route path="/recipes/:id/edit" element={<EditRecipeForm />} />
-      </Routes>
-    </div>
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
