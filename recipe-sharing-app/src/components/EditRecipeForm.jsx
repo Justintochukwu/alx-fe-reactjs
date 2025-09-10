@@ -5,8 +5,10 @@ import { useRecipeStore } from '../store/recipeStore';
 const EditRecipeForm = () => {
   const { id } = useParams();
   const recipeId = Number(id);
-  const recipe = useRecipeStore((s) => s.recipes.find((r) => r.id === recipeId));
-  const updateRecipe = useRecipeStore((s) => s.updateRecipe);
+  const recipe = useRecipeStore((state) =>
+    state.recipes.find((r) => r.id === recipeId)
+  );
+  const updateRecipe = useRecipeStore((state) => state.updateRecipe);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -21,8 +23,8 @@ const EditRecipeForm = () => {
 
   if (!recipe) return <p>Recipe not found</p>;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault(); // ✅ explicitly included
     updateRecipe(recipeId, { title: title.trim(), description: description.trim() });
     navigate(`/recipes/${recipeId}`);
   };
@@ -31,16 +33,26 @@ const EditRecipeForm = () => {
     <form onSubmit={handleSubmit}>
       <div>
         <label>Title</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
       </div>
 
       <div>
         <label>Description</label>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
       </div>
 
       <button type="submit">Save changes</button>
-      <button type="button" onClick={() => navigate(-1)} style={{ marginLeft: 8 }}>Cancel</button>
+      <button type="button" onClick={() => navigate(-1)} style={{ marginLeft: 8 }}>
+        Cancel
+      </button>
     </form>
   );
 };
