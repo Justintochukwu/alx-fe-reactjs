@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import AddRecipeForm from "./components/AddRecipeForm";
 import RecipeList from "./components/RecipeList";
 import SearchBar from ".component/SearchBar";
+import RecipeDetail from ".components/RecipeDetail";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/addrecipeform" element={<AddRecipeForm />} />
           <Route path="/recipelist" element={<RecipeList />} />
+          <Route path="/recipedetail" element={<RecipeDetail />} />
         </Routes>
       </div>
     </Router>
