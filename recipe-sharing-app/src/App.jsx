@@ -6,8 +6,10 @@ import Contact from "./components/Contact";
 import Navbar from "./components/Navbar";
 import AddRecipeForm from "./components/AddRecipeForm";
 import RecipeList from "./components/RecipeList";
-import SearchBar from ".component/SearchBar";
-import RecipeDetail from ".components/RecipeDetail";
+import SearchBar from "./component/SearchBar";
+import RecipeDetail from "./components/RecipeDetail";
+import FavouriteList from "./components/FavouriteList";
+import RecommendationsList from "./components/RecommendationsList";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path="/addrecipeform" element={<AddRecipeForm />} />
           <Route path="/recipelist" element={<RecipeList />} />
           <Route path="/recipedetail" element={<RecipeDetail />} />
+          <Route path="/favouritelist" element={<FavouriteList />} />
+          <Route path="/recommendationslist" element={<RecommendationsList />} />
         </Routes>
       </div>
     </Router>

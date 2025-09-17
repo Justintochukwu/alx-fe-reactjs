@@ -1,34 +1,38 @@
 import { create } from 'zustand';
 
-const loadFromLocalStorage = () => {
+// --- Helpers for persistence ---
+const loadFromLocalStorage = (key, fallback) => {
   try {
-    if (typeof window === 'undefined') return [];
-    const raw = localStorage.getItem('recipes');
-    return raw ? JSON.parse(raw) : [];
+    if (typeof window === 'undefined') return fallback;
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
   } catch (e) {
-    console.error('Failed to load recipes from localStorage', e);
-    return [];
+    console.error(`Failed to load ${key} from localStorage`, e);
+    return fallback;
   }
 };
 
-const saveToLocalStorage = (recipes) => {
+const saveToLocalStorage = (key, data) => {
   try {
     if (typeof window === 'undefined') return;
-    localStorage.setItem('recipes', JSON.stringify(recipes));
+    localStorage.setItem(key, JSON.stringify(data));
   } catch (e) {
-    console.error('Failed to save recipes to localStorage', e);
+    console.error(`Failed to save ${key} to localStorage`, e);
   }
 };
 
+// --- Zustand Store ---
 export const useRecipeStore = create((set, get) => ({
-  recipes: loadFromLocalStorage(),
+  // State
+  recipes: loadFromLocalStorage('recipes', []),
+  favorites: loadFromLocalStorage('favorites', []),
   searchTerm: '',
 
   // CRUD
   addRecipe: (newRecipe) =>
     set((state) => {
       const recipes = [...state.recipes, newRecipe];
-      saveToLocalStorage(recipes);
+      saveToLocalStorage('recipes', recipes);
       return { recipes };
     }),
 
@@ -37,22 +41,23 @@ export const useRecipeStore = create((set, get) => ({
       const recipes = state.recipes.map((r) =>
         r.id === id ? { ...r, ...updatedFields } : r
       );
-      saveToLocalStorage(recipes);
+      saveToLocalStorage('recipes', recipes);
       return { recipes };
     }),
 
   deleteRecipe: (id) =>
     set((state) => {
       const recipes = state.recipes.filter((r) => r.id !== id);
-      saveToLocalStorage(recipes);
+      saveToLocalStorage('recipes', recipes);
       return { recipes };
     }),
 
   setRecipes: (recipes) => {
-    saveToLocalStorage(recipes);
+    saveToLocalStorage('recipes', recipes);
     set({ recipes });
   },
 
+  // Search & Filtering
   setSearchTerm: (term) => set({ searchTerm: term }),
 
   filteredRecipes: () => {
@@ -60,6 +65,47 @@ export const useRecipeStore = create((set, get) => ({
     if (!searchTerm.trim()) return recipes;
     return recipes.filter((r) =>
       r.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  },
+
+  // Favorites
+  addToFavorites: (id) =>
+    set((state) => {
+      if (state.favorites.includes(id)) return state; // prevent duplicates
+      const favorites = [...state.favorites, id];
+      saveToLocalStorage('favorites', favorites);
+      return { favorites };
+    }),
+
+  removeFromFavorites: (id) =>
+    set((state) => {
+      const favorites = state.favorites.filter((fid) => fid !== id);
+      saveToLocalStorage('favorites', favorites);
+      return { favorites };
+    }),
+
+  isFavorite: (id) => {
+    const { favorites } = get();
+    return favorites.includes(id);
+  },
+
+  // Simple Recommendations (based on favorite title keywords)
+  getRecommendations: () => {
+    const { favorites, recipes } = get();
+    if (favorites.length === 0) return [];
+
+    const favoriteTitles = favorites
+      .map((fid) => recipes.find((r) => r.id === fid)?.title || "")
+      .filter(Boolean);
+
+    const keywords = favoriteTitles.map((title) =>
+      title.split(" ")[0].toLowerCase()
+    );
+
+    return recipes.filter(
+      (r) =>
+        !favorites.includes(r.id) &&
+        keywords.some((kw) => r.title.toLowerCase().includes(kw))
     );
   },
 }));
