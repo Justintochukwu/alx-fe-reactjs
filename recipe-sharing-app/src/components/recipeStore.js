@@ -20,9 +20,11 @@ const saveToLocalStorage = (recipes) => {
   }
 };
 
-export const useRecipeStore = create((set) => ({
+export const useRecipeStore = create((set, get) => ({
   recipes: loadFromLocalStorage(),
+  searchTerm: '',
 
+  // CRUD
   addRecipe: (newRecipe) =>
     set((state) => {
       const recipes = [...state.recipes, newRecipe];
@@ -49,5 +51,15 @@ export const useRecipeStore = create((set) => ({
   setRecipes: (recipes) => {
     saveToLocalStorage(recipes);
     set({ recipes });
+  },
+
+  setSearchTerm: (term) => set({ searchTerm: term }),
+
+  filteredRecipes: () => {
+    const { recipes, searchTerm } = get();
+    if (!searchTerm.trim()) return recipes;
+    return recipes.filter((r) =>
+      r.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   },
 }));
