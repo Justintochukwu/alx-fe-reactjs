@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useRecipeStore } from '../store/recipeStore';
 
 const RecipeList = () => {
-  const recipes = useRecipeStore((s) => s.recipes);
+  const recipes = useRecipeStore((s) => s.filteredRecipes);
 
   return (
     <div>
