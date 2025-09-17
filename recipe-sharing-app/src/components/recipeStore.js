@@ -89,8 +89,8 @@ export const useRecipeStore = create((set, get) => ({
     return favorites.includes(id);
   },
 
-  // Simple Recommendations (based on favorite title keywords)
-  getRecommendations: () => {
+  // === Recommendations (renamed from getRecommendations) ===
+  recommendations: () => {
     const { favorites, recipes } = get();
     if (favorites.length === 0) return [];
 
