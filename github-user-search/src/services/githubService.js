@@ -1,27 +1,24 @@
 import axios from "axios";
 
-const BASE_URL = "https://api.github.com";
+const BASE_URL = "https://api.github.com/search/users";
 
-export async function fetchUserData({ username, location, minRepos, page = 1 }) {
+/**
+ * Fetch users with advanced search
+ * @param {Object} params - search parameters
+ * @param {string} params.username - GitHub username
+ * @param {string} [params.location] - optional location filter
+ * @param {number} [params.minRepos] - optional minimum repo count
+ */
+export const fetchUserData = async ({ username, location, minRepos }) => {
   try {
-    let query = "";
-
-    if (username) query += `${username} in:login`;
+    // Build query string
+    let query = username ? `${username} in:login` : "";
     if (location) query += ` location:${location}`;
     if (minRepos) query += ` repos:>=${minRepos}`;
 
-    const response = await axios.get(`${BASE_URL}/search/users`, {
-      params: { q: query, per_page: 10, page },
-      headers: {
-        Accept: "application/vnd.github.v3+json",
-        Authorization: import.meta.env.VITE_APP_GITHUB_API_KEY
-          ? `token ${import.meta.env.VITE_APP_GITHUB_API_KEY}`
-          : undefined,
-      },
-    });
-
-    return response.data.items;
+    const response = await axios.get(`${BASE_URL}?q=${query}`);
+    return response.data; // includes items (list of users)
   } catch (error) {
     throw new Error("Looks like we cant find the user");
   }
-}
+};
