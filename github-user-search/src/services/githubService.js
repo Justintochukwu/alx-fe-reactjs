@@ -1,23 +1,27 @@
 import axios from "axios";
 
-// GitHub API Base URL
-const GITHUB_API_URL = "https://api.github.com";
+const BASE_URL = "https://api.github.com";
 
-// Read API key from environment (optional, helps with rate limits)
-const GITHUB_API_KEY = import.meta.env.VITE_APP_GITHUB_API_KEY;
-
-export const fetchUserData = async (username) => {
+export async function fetchUserData({ username, location, minRepos, page = 1 }) {
   try {
-    const response = await axios.get(`${GITHUB_API_URL}/users/${username}`, {
-      headers: GITHUB_API_KEY
-        ? { Authorization: `token ${GITHUB_API_KEY}` }
-        : {}, // only add header if API key exists
+    let query = "";
+
+    if (username) query += `${username} in:login`;
+    if (location) query += ` location:${location}`;
+    if (minRepos) query += ` repos:>=${minRepos}`;
+
+    const response = await axios.get(`${BASE_URL}/search/users`, {
+      params: { q: query, per_page: 10, page },
+      headers: {
+        Accept: "application/vnd.github.v3+json",
+        Authorization: import.meta.env.VITE_APP_GITHUB_API_KEY
+          ? `token ${import.meta.env.VITE_APP_GITHUB_API_KEY}`
+          : undefined,
+      },
     });
 
-    return response.data; // user object
+    return response.data.items;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch GitHub user"
-    );
+    throw new Error("Looks like we cant find the user");
   }
-};
+}
