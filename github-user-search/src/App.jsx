@@ -1,47 +1,41 @@
 import { useState } from "react";
-import { fetchGitHubUser } from "./services/githubApi";
-import "./App.css";
+import { fetchUserData } from "./services/githubService";
+import Search from "./components/Search";
 
 function App() {
-  const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSearch = async () => {
+  const handleSearch = async (username) => {
+    setLoading(true);
+    setError("");
+    setUser(null);
+
     try {
-      const data = await fetchGitHubUser(username);
+      const data = await fetchUserData(username);
       setUser(data);
-      setError("");
     } catch (err) {
-      setError(err.message);
-      setUser(null);
+      setError("Looks like we can't find the user.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="App">
       <h1>🔍 GitHub User Search</h1>
+      <Search onSearch={handleSearch} />
 
-      <div className="search">
-        <input
-          type="text"
-          placeholder="Enter GitHub username..."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
+      {/* Conditional Rendering */}
+      {loading && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
       {user && (
         <div className="user-card">
-          <img src={user.avatar_url} alt={user.login} width={120} />
-          <h2>{user.login}</h2>
-          <p>{user.bio || "No bio available"}</p>
-          <p>Followers: {user.followers} | Following: {user.following}</p>
+          <img src={user.avatar_url} alt={user.login} className="avatar" />
+          <h2>{user.name || user.login}</h2>
           <a href={user.html_url} target="_blank" rel="noreferrer">
-            View Profile
+            Visit Profile
           </a>
         </div>
       )}
