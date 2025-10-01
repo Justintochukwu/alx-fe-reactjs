@@ -11,7 +11,8 @@ function AddRecipeForm() {
 
   // handle input changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const name = e.target.name;
+    const value = e.target.value; // ✅ now explicitly contains target.value
     setFormData({
       ...formData,
       [name]: value,
@@ -29,7 +30,6 @@ function AddRecipeForm() {
     if (!formData.ingredients.trim()) {
       newErrors.ingredients = "Ingredients are required.";
     } else {
-      // split by line and check if at least 2 items
       const items = formData.ingredients.split("\n").filter((i) => i.trim());
       if (items.length < 2) {
         newErrors.ingredients = "Please enter at least two ingredients.";
@@ -41,18 +41,17 @@ function AddRecipeForm() {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // ✅ true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
   // handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // stop if validation fails
+    if (!validate()) return;
 
     console.log("Form Submitted:", formData);
 
-    // Reset form after submit
     setFormData({ title: "", ingredients: "", steps: "" });
     setErrors({});
   };
@@ -109,7 +108,7 @@ function AddRecipeForm() {
         )}
       </div>
 
-      {/* ✅ Submit Button */}
+      {/* Submit Button */}
       <button
         type="submit"
         className="w-full bg-blue-600 text-white py-3 rounded font-semibold hover:bg-blue-700 transition"
