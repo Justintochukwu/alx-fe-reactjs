@@ -59,7 +59,7 @@ function AddRecipeForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg space-y-5"
+      className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg space-y-5 md:space-y-6"
     >
       <h2 className="text-2xl font-bold text-center text-gray-800">
         Add New Recipe
@@ -73,7 +73,7 @@ function AddRecipeForm() {
           value={formData.title}
           onChange={handleChange}
           placeholder="Recipe Title"
-          className="w-full border rounded p-3 focus:ring focus:ring-blue-300"
+          className="w-full border rounded p-3 md:p-4 focus:ring focus:ring-blue-300"
         />
         {errors.title && (
           <p className="text-red-500 text-sm mt-1">{errors.title}</p>
@@ -87,7 +87,7 @@ function AddRecipeForm() {
           value={formData.ingredients}
           onChange={handleChange}
           placeholder="Ingredients (one per line)"
-          className="w-full border rounded p-3 h-28 focus:ring focus:ring-blue-300"
+          className="w-full border rounded p-3 h-28 md:p-4 h-28 md:h-32 focus:ring focus:ring-blue-300"
         />
         {errors.ingredients && (
           <p className="text-red-500 text-sm mt-1">{errors.ingredients}</p>
@@ -101,7 +101,7 @@ function AddRecipeForm() {
           value={formData.steps}
           onChange={handleChange}
           placeholder="Preparation Steps"
-          className="w-full border rounded p-3 h-32 focus:ring focus:ring-blue-300"
+          className="w-full border rounded p-3 h-32 md:p-4 h-32 md:h-40 focus:ring focus:ring-blue-300"
         />
         {errors.steps && (
           <p className="text-red-500 text-sm mt-1">{errors.steps}</p>
@@ -111,7 +111,7 @@ function AddRecipeForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-3 rounded font-semibold hover:bg-blue-700 transition"
+        className="w-full bg-blue-600 text-white py-3 md:py-4 rounded font-semibold hover:bg-blue-700 transition"
       >
         Submit Recipe
       </button>
