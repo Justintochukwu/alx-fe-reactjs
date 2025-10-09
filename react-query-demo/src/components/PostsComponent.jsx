@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 
-// Function to fetch data from JSONPlaceholder API
+// Function to fetch posts from JSONPlaceholder API
 const fetchPosts = async () => {
   const response = await fetch("https://jsonplaceholder.typicode.com/posts");
   if (!response.ok) {
@@ -11,7 +11,7 @@ const fetchPosts = async () => {
 };
 
 const PostsComponent = () => {
-  // useQuery hook for fetching posts
+  // ✅ useQuery with advanced configuration
   const {
     data: posts,
     isLoading,
@@ -19,7 +19,13 @@ const PostsComponent = () => {
     error,
     refetch,
     isFetching,
-  } = useQuery("posts", fetchPosts);
+  } = useQuery("posts", fetchPosts, {
+    // ✅ Caching & refetch behavior settings
+    cacheTime: 1000 * 60 * 10, // 10 minutes in cache before garbage collection
+    staleTime: 1000 * 60 * 1, // 1 minute before data becomes stale
+    refetchOnWindowFocus: false, // don’t refetch when window regains focus
+    keepPreviousData: true, // keep old data while fetching new one
+  });
 
   // Loading state
   if (isLoading) return <p className="text-blue-600">Loading posts...</p>;
@@ -27,7 +33,6 @@ const PostsComponent = () => {
   // Error state
   if (isError) return <p className="text-red-500">Error: {error.message}</p>;
 
-  // Data loaded
   return (
     <div className="w-full max-w-2xl">
       <div className="flex justify-between items-center mb-4">
