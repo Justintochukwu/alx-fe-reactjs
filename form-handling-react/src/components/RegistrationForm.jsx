@@ -43,7 +43,7 @@ const RegistrationForm = () => {
     }
 
     // Clear error
-    setError("");
+    setErrors("");
 
     // You can handle registration logic here
     console.log("Form submitted:", { username, email, password });

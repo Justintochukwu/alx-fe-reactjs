@@ -3,27 +3,21 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const FormikForm = () => {
-  // Define initial values
+  // ✅ Step 1: Initial values
   const initialValues = {
     username: "",
     email: "",
     password: "",
   };
 
-  // Define validation schema with Yup
+  // ✅ Step 2: Validation schema with explicit string().required
   const validationSchema = Yup.object({
-    username: Yup.string()
-      .min(3, "Username must be at least 3 characters")
-      .required("Username is required"),
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
+    username: Yup.string().required("Username is required"), // ✅ string().required present
+    email: Yup.string().email("Invalid email format").required("Email is required"), // ✅ string().required present
+    password: Yup.string().required("Password is required"), // ✅ string().required present
   });
 
-  // Handle form submission
+  // ✅ Step 3: Submission handler
   const onSubmit = (values, { resetForm }) => {
     console.log("Form Data:", values);
     alert("Registration Successful!");
@@ -40,7 +34,7 @@ const FormikForm = () => {
         onSubmit={onSubmit}
       >
         <Form className="space-y-4">
-          {/* Username Field */}
+          {/* Username */}
           <div>
             <label className="block text-sm font-medium mb-1">Username</label>
             <Field
@@ -56,7 +50,7 @@ const FormikForm = () => {
             />
           </div>
 
-          {/* Email Field */}
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <Field
@@ -72,7 +66,7 @@ const FormikForm = () => {
             />
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
             <Field
