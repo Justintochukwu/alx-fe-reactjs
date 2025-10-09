@@ -33,13 +33,13 @@ const RegistrationForm = () => {
     setError("");
 
     // You can handle registration logic here
-    console.log("Form submitted successfully:", formData);
+    console.log("Form submitted:", { username, email, password });
 
     // Reset form
     setFormData({
-      username: "",
-      email: "",
-      password: "",
+      setUsername: "",
+      setEmail: "",
+      setPassword: "",
     });
   };
 
@@ -53,8 +53,8 @@ const RegistrationForm = () => {
             type="text"
             name="username"
             placeholder="Enter your username"
-            value={formData.username}
-            onChange={handleChange}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full border rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
@@ -65,8 +65,8 @@ const RegistrationForm = () => {
             type="email"
             name="email"
             placeholder="Enter your email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full border rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
@@ -77,8 +77,8 @@ const RegistrationForm = () => {
             type="password"
             name="password"
             placeholder="Enter your password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full border rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
