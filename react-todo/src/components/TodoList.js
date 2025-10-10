@@ -8,6 +8,7 @@ const TodoList = () => {
   ]);
 
   const addTodo = (text) => {
+    if (text.trim() === "") return;
     setTodos([...todos, { id: Date.now(), text, completed: false }]);
   };
 
@@ -38,7 +39,12 @@ const TodoList = () => {
             }}
           >
             {todo.text}
-            <button onClick={(e) => { e.stopPropagation(); deleteTodo(todo.id); }}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTodo(todo.id);
+              }}
+            >
               Delete
             </button>
           </li>

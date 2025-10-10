@@ -12,33 +12,30 @@ describe("TodoList Component", () => {
 
   test("adds a new todo", () => {
     render(<TodoList />);
+
+    // Matches the actual placeholder in AddTodoForm
     const input = screen.getByPlaceholderText("Add a new task");
-    const button = screen.getByText("Add");
+    const addButton = screen.getByText("Add");
 
-    fireEvent.change(input, { target: { value: "New Todo" } });
-    fireEvent.click(button);
+    fireEvent.change(input, { target: { value: "Test new todo" } });
+    fireEvent.click(addButton);
 
-    expect(screen.getByText("New Todo")).toBeInTheDocument();
+    expect(screen.getByText("Test new todo")).toBeInTheDocument();
   });
 
-  test("toggles todo completion", () => {
+  test("toggles a todo as completed", () => {
     render(<TodoList />);
-    const todo = screen.getByText("Learn React");
+    const todoItem = screen.getByText("Learn React");
 
-    fireEvent.click(todo);
-    expect(todo).toHaveStyle("text-decoration: line-through");
-
-    fireEvent.click(todo);
-    expect(todo).toHaveStyle("text-decoration: none");
+    expect(todoItem).toHaveStyle("text-decoration: none");
+    fireEvent.click(todoItem);
+    expect(todoItem).toHaveStyle("text-decoration: line-through");
   });
 
   test("deletes a todo", () => {
     render(<TodoList />);
     const deleteButtons = screen.getAllByText("Delete");
-    const firstTodo = screen.getByText("Learn React");
-
     fireEvent.click(deleteButtons[0]);
-
-    expect(firstTodo).not.toBeInTheDocument();
+    expect(screen.queryByText("Learn React")).not.toBeInTheDocument();
   });
 });
