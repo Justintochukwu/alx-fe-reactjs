@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "jest",
-    "testEnvironment": "jsdom"
+    "test": "jest"
   },
   "dependencies": {
     "react": "^19.1.1",
